@@ -4,8 +4,6 @@ const JsonWebToken = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const dotenv = require("dotenv").config()
 const Secret = require("../middleware/generateSecret")
-console.log(Secret.generate())
-console.log(Secret.generate())
 
 exports.addUser = async (req, res) => {
   try {
@@ -14,7 +12,7 @@ exports.addUser = async (req, res) => {
       password: bcrypt.hashSync(req.body.password, 10),
       personalKey: Secret.generate(),
     }
-    console.log(object.personalKey)
+
     const newuser = await userService.addUser(object)
     const token = JsonWebToken.sign({ id: newuser.id }, object.personalKey, {
       expiresIn: "4h",
@@ -45,7 +43,6 @@ exports.userLogin = async (req, res) => {
         Secret.generate()
       )
 
-      console.log(updateUser.personalKey)
       const token = JsonWebToken.sign({ id: id }, updateUser.personalKey, {
         expiresIn: "4h",
       })
@@ -63,7 +60,7 @@ exports.getUserByToken = async (req, res) => {
     const email = req.query.id
     try {
       const userSessionSecretKey = await userService.getUserByEmail(email)
-      console.log(userSessionSecretKey.personalKey)
+
       let decoded = JsonWebToken.verify(
         authorization,
         userSessionSecretKey.personalKey
@@ -71,6 +68,7 @@ exports.getUserByToken = async (req, res) => {
       try {
         const findUser = await userService.getUserById(decoded.id)
         let object = {
+          success: true,
           userID: findUser.id,
           email: findUser.email,
           name: findUser.name,

@@ -1,16 +1,24 @@
 const JsonWebToken = require("jsonwebtoken")
 const dotenv = require("dotenv").config()
+const userService = require("../services/userService")
 
 SECRET = process.env.TOKEN_SECRET
 
-exports.Auth = (req, res, next) => {
+exports.Auth = async (req, res, next) => {
   if (req.headers && req.headers.authorization) {
     let authorization = req.headers.authorization
-    try {
-      let decoded = JsonWebToken.verify(authorization, SECRET)
-      next()
-    } catch (err) {
-      res.status(500).json({ success: false, error: "Authorization failed" })
+    if (req.query && req.query.id) {
+      let email = req.query.id
+      try {
+        const userSessionSecretKey = await userService.getUserByEmail(email)
+        let decoded = JsonWebToken.verify(
+          authorization,
+          userSessionSecretKey.personalKey
+        )
+        next()
+      } catch (err) {
+        res.status(500).json({ success: false, error: "Authorization failed" })
+      }
     }
   } else {
     res

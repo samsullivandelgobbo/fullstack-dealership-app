@@ -37,7 +37,7 @@ app.use(morgan("dev"))
 app.use("/user", userRoutes)
 app.use("/inventory", vehicleRoutes)
 
-app.use("/uploads", express.static("uploads"))
+app.use("/uploads", express.static("uploads/"))
 
 var httpServer = http.createServer(app)
 // var httpsServer = https.createServer(credentials, app);

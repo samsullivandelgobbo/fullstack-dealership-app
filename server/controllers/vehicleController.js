@@ -1,15 +1,18 @@
+const { json } = require("body-parser")
 const vehicleService = require("../services/vehicleService")
 
 const dotenv = require("dotenv").config()
-let mediaPath = process.env.MEDIAPATH
-
+const mediaPath = process.env.MEDIAPATH
+console.log(mediaPath)
 exports.addNew = async (req, res) => {
   try {
     let photos = []
     console.log("POST Photo:")
     const jsondata = JSON.parse(req.body.jsondata)
     for (let x = 0; x < jsondata.filelen; x++) {
-      photos.push(mediaPath + jsondata.stockNum + x + ".jpg")
+      photos.push(
+        mediaPath + jsondata.stockNum + "/" + jsondata.stockNum + x + ".jpg"
+      )
     }
     jsondata.photos = photos
     delete jsondata.filelen
