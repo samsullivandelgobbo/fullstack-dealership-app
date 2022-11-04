@@ -2,10 +2,10 @@
   export let item:any
 </script>
 
-<div class="card card-compact bg-base-100 shadow-xl">
+<div class="card card-compact bg-base-100 shadowl-sm">
   <figure>
     <a>
-      <img src={item.photos[1]} alt="Shoes" class="h-48"/>
+      <img src={item.photos[1]} alt="Shoes" class="min-h-fit"/>
     </a>
     <div class="absolute right-4 top-4 hover:scale-125">
       <slot />

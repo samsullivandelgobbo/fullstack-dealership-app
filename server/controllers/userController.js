@@ -4,6 +4,8 @@ const JsonWebToken = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const dotenv = require("dotenv").config()
 const Secret = require("../middleware/generateSecret")
+const passport = require("passport")
+const GoogleStrategy = require("passport-google-oauth20").Strategy
 
 exports.addUser = async (req, res) => {
   try {
@@ -21,6 +23,51 @@ exports.addUser = async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, error: err })
   }
+}
+
+exports.GoogleUser = passport.authenticate("google", {
+  session: false,
+  scope: ["openid", "profile", "email"],
+})
+passport.use(
+  new GoogleStrategy(
+    {
+      callbackURL: process.env.CALLBACK_URL,
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const userObject = {
+        email: profile.emails[0].value,
+        name: {
+          first: profile.name.givenName,
+          last: profile.name.familyName,
+        },
+        source: "google",
+        profilePhoto: profile.photos[0].value,
+        personalKey: Secret.generate(),
+      }
+
+      let currentUser = await userService.getUserByEmail(userObject.email)
+      if (!currentUser) {
+        try {
+          currentUser = await userService.addUser(userObject)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      done(null, currentUser)
+    }
+  )
+)
+
+exports.GoogleToken = async (req, res) => {
+  const token = JsonWebToken.sign({ id: req.user.id }, req.user.personalKey)
+  res
+    .status(200)
+    .cookie("token", token, { httpOnly: false })
+    .cookie("userData", req.user.email, { httpOnly: false })
+    .redirect("http://localhost:5173")
 }
 
 exports.userLogin = async (req, res) => {
@@ -47,9 +94,9 @@ exports.userLogin = async (req, res) => {
         expiresIn: "4h",
       })
 
-      res.status(200).json({ success: true, token: token })
+      res.json({ success: true, token: token })
     } catch (err) {
-      res.status(500).json({ error: err })
+      res.status(500)
     }
   }
 }

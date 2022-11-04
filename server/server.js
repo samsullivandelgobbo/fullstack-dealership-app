@@ -4,6 +4,7 @@ const morgan = require("morgan")
 const cors = require("cors")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
+const passport = require("passport")
 
 const fs = require("fs")
 const http = require("http")
@@ -34,7 +35,7 @@ app.use(bodyParser.json())
 app.use(morgan("dev"))
 
 //routes
-app.use("/user", userRoutes)
+app.use("/user", userRoutes, passport.initialize())
 app.use("/inventory", vehicleRoutes)
 
 app.use("/uploads", express.static("uploads/"))

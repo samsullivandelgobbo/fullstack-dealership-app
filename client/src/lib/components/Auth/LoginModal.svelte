@@ -4,6 +4,7 @@
     import { Token } from '$lib/components'
     let email:string
     let password:string
+    let GOOGLE_AUTH_URL = 'http://localhost:8080/user/auth/google'
 
     async function SignIn () {
         const response = await axios.post('http://localhost:8080/user/login', {
@@ -20,7 +21,7 @@
 </script>
 
 <!-- The button to open modal -->
-<label for="my-modal" class="btn">open modal</label>
+<label for="my-modal" class=""><slot/></label>
 
 <!-- Put this part before </body> tag -->
 <input type="checkbox" id="my-modal" class="modal-toggle" />
@@ -101,7 +102,7 @@
                 </p>
     
                 <a
-                href="#"
+                href={GOOGLE_AUTH_URL}
                 class="flex items-center justify-center px-6 py-3 mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg"
                 >
                 <svg class="w-6 h-6 mx-2" viewBox="0 0 40 40">

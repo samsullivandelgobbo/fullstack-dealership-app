@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const userController = require("../controllers/userController")
 const tokenAuth = require("../middleware/tokenAuth")
+const passport = require("passport")
 // const googleAuthController = require("../controllers/googleAuthController")
 
 router.post("/register", userController.addUser)
@@ -21,8 +22,14 @@ router.post("/favorite/remove", tokenAuth.Auth, userController.deleteFavorite)
 // router.post('/messages/send', userController.sendMessage)
 // router.get('/messages/user/:id', userController.getUserMessages)
 
-// router.get('/auth/google', googleAuthController.GoogleUser)
-// router.get('/auth/google/callback', passport.authenticate("google", { failureRedirect: 'http://localhost:5173', session: false}), googleAuthController.GenerateToken
-// )
+router.get("/auth/google", userController.GoogleUser)
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:5173",
+    session: false,
+  }),
+  userController.GoogleToken
+)
 
 module.exports = router
