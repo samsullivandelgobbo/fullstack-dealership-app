@@ -24,9 +24,7 @@ export const Token = async () => {
       localStorage.setItem("token", token)
     }
   }
-  console.log(token, userID)
   if (token && userID) {
-    console.log("here")
     const res = await axios
       .get("http://localhost:8080/user/verify", {
         headers: { Authorization: token },

@@ -58,7 +58,7 @@
         <li><a href="/finance">Finance</a></li>
       </ul>
     </div>
-    <a class="btn btn-ghost normal-case text-xl">Salesy</a>
+    <a class="btn btn-ghost normal-case text-xl" href="/">Salesy</a>
   </div>
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal p-0">

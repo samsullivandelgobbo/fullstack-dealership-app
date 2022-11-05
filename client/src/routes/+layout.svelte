@@ -21,7 +21,7 @@
   
   })
 
-  
+  //TODO: Add a user avatar to the navbar
 </script>
 
 <Navbar>
