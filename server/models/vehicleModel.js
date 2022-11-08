@@ -45,10 +45,14 @@ const vehicleSchema = mongoose.Schema({
   },
   specs: {
     engine: String,
-    fuel: String,
+    fuelType: String,
     drivetrain: String,
     platform: String,
     transmission: String,
+    doors: String,
+    seats: String,
+    fuelEconomy: String,
+
   },
   location: {
     String
@@ -58,7 +62,7 @@ const vehicleSchema = mongoose.Schema({
     maxlength: 200,
   },
   photos: [{
-      type: String,
+    type: String,
   }],
   sold: {
     type: Boolean,

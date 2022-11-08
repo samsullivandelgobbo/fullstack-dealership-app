@@ -62,7 +62,7 @@ passport.use(
 )
 
 exports.GoogleToken = async (req, res) => {
-  const token = JsonWebToken.sign({ id: req.user.id }, req.user.personalKey)
+  const token = JsonWebToken.sign({ id: req.user.id }, req.user.personalKey, { expiresIn: "4h" },)
   res
     .status(200)
     .cookie("token", token, { httpOnly: false })

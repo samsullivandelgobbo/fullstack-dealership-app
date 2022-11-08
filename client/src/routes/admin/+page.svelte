@@ -1,6 +1,7 @@
 <script>
-  import { Dashboard } from "$lib/components"
-
+  import { Dashboard, AddVehicle } from "$lib/components";
 </script>
 
-<Dashboard/>
+<Dashboard>
+  <AddVehicle />
+</Dashboard>
