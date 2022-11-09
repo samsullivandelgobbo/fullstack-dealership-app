@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
   import axios from "axios";
-  let files;
+  import VehicleList from "../Inventory/VehicleList.svelte"
+  let files:object
   let vehicle = {
     make: "",
     model: "",
@@ -23,10 +24,28 @@
       seats: "",
       fuelEconomy: "",
     },
+    fileLength: "",
+
+    
+
   };
-  const test = () => {
-    console.log(vehicle);
-  };
+  let showImage = false
+  let images = []
+  function onChange() {
+    if (files) {
+      showImage = true;
+      for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        
+          images[i] = (reader.result);
+        
+      })
+     
+        reader.readAsDataURL(files[i]);
+      }
+    }
+  }
 
   async function vinPopulate(vin) {
     console.log(vin);
@@ -34,10 +53,21 @@
       `https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`
     );
     console.log(vindata);
+    console.log(vindata.data.Results[7])
+    vehicle.make = vindata.data.Results[7].Value
+    vehicle.model = vindata.data.Results[9].Value
+    vehicle.year = vindata.data.Results[10].Value
+    vehicle.specs.doors = vindata.data.Results[24].Value
+    vehicle.specs.seats = vindata.data.Results[47].Value
+
+    //TODO: add engine specs for displacement, cylinders, etc.
+
   }
 
   const addVehicle = async () => {
+    console.log('adding vehicle')
     let fileLength = files.length;
+    vehicle.fileLength = fileLength;
     let formData = new FormData();
     let jsondata = JSON.stringify(vehicle);
     formData.append("jsondata", jsondata);
@@ -51,6 +81,9 @@
       headers: {
         Authorization: localStorage.getItem("token"),
       },
+      params: {
+        id: localStorage.getItem('userData')
+      }
     })
       .then(function (response) {
         console.log(response.data);
@@ -80,6 +113,7 @@
       <button class="btn btn-primary" on:click={addVehicle}>Add Vehicle</button>
       <label for="make">Make</label>
       <input
+        placeholder={vehicle.make}
         type="text"
         id="make"
         bind:value={vehicle.make}
@@ -171,6 +205,17 @@
   "
       multiple
       bind:files
+      accept="image/*"
+      on:change={onChange}
     />
   </div>
 </div>
+
+
+
+{#if showImage}
+{#each images as image}
+    <img src={image} alt="image" />
+{/each}
+  
+{/if}

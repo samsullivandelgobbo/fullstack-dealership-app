@@ -7,9 +7,10 @@ console.log(mediaPath)
 exports.addNew = async (req, res) => {
   try {
     let photos = []
-    console.log("POST Photo:")
+    console.log("POST Vehicle:")
     const jsondata = JSON.parse(req.body.jsondata)
-    for (let x = 0; x < jsondata.filelen; x++) {
+    console.log(jsondata.fileLength)
+    for (let x = 0; x < jsondata.fileLength; x++) {
       photos.push(
         mediaPath + jsondata.stockNum + "/" + jsondata.stockNum + x + ".jpg"
       )
