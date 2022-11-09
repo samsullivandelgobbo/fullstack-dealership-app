@@ -41,7 +41,7 @@ exports.getByMultiple = async (req, res) => {
 exports.loadAll = async (req, res) => {
   try {
     const vehicles = await vehicleService.getAll()
-    res.status(200).send(vehicles)
+    res.status(200).json({ vehicles: vehicles, date: Date.now() })
   } catch (err) {
     res.status(500).json(err)
   }
