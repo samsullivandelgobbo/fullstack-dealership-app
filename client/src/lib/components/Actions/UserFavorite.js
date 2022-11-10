@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios"
 import { userInfo } from '$lib/data/store'
 
 /** 
@@ -14,14 +14,58 @@ import { userInfo } from '$lib/data/store'
  * @param {*} state 
  * @param {*} id 
  */
-export const HandleFavorite = async (id) => {
+export async function AddFavorite(favorite) {
   let favorites
+  console.log(favorite)
+  let userID
+  let email
   userInfo.subscribe((value) => {
     favorites = value.favorites
-    console.log(favorites)
+    userID = value.userID
+    email = value.email
   })
+  const res = await axios({
+    method: 'post',
+    url: 'http://localhost:8080/user/favorite',
+    data: {
+      id: userID,
+      favorite: favorite,
+    },
+    headers: {
+      Authorization: localStorage.getItem('token'),
+    },
+    params: {
+      id: email,
+    }
+  })
+  userInfo.update((value) => {
+    value = [...value, favorite]
+  })
+  console.log(res.data)
+}
 
-  if (favorites.includes(id)) {
-    await axios.post('http://localhost:8080/user/favorite'
-  }
+export async function RemoveFavorite(favorite) {
+  console.log("removing favorite")
+  let favorites
+  let userID
+  let email
+  userInfo.subscribe((value) => {
+    favorites = value.favorites
+    userID = value.userID
+    email = value.email
+  })
+  const res = await axios({
+    method: 'post',
+    url: 'http://localhost:8080/user/favorite',
+    data: {
+      id: userID,
+      favorite: favorite,
+    },
+    headers: {
+      Authorization: localStorage.getItem('token'),
+    },
+    params: {
+      id: email,
+    }
+  })
 }

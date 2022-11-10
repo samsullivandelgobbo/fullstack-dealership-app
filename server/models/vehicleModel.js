@@ -55,7 +55,7 @@ const vehicleSchema = mongoose.Schema({
 
   },
   location: {
-    String
+    type: String
   },
   notes: {
     type: String,

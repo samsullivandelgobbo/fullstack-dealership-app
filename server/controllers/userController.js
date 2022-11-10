@@ -176,7 +176,7 @@ exports.addFavorite = async (req, res) => {
       req.body.id,
       req.body.favorite
     )
-    await res.status(200).send(favorite)
+    await res.status(200).json({ success: true, favorite: favorite.favorites })
   } catch (err) {
     res.status(500).json({ error: err })
   }
@@ -188,7 +188,7 @@ exports.deleteFavorite = async (req, res) => {
       req.body.id,
       req.body.favorite
     )
-    await res.status(200).send(newFavorites)
+    await res.status(200).json({ success: true, newFavorites: newFavorites.favorites })
   } catch (err) {
     res.status(500).json({ error: err })
   }

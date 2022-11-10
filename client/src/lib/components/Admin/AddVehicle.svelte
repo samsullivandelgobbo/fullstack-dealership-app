@@ -1,7 +1,7 @@
 <script lang="ts">
-  import axios from "axios"
-  import VehicleList from "../Inventory/VehicleList.svelte"
-  let files: object
+  import axios from "axios";
+  import VehicleList from "../Inventory/VehicleList.svelte";
+  let files: object;
   let vehicle = {
     make: "",
     model: "",
@@ -25,48 +25,48 @@
       fuelEconomy: "",
     },
     fileLength: "",
-  }
-  let showImage = false
-  let images = []
+  };
+  let showImage = false;
+  let images = [];
   function onChange() {
     if (files) {
-      showImage = true
+      showImage = true;
       for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader()
+        const reader = new FileReader();
         reader.addEventListener("load", () => {
-          images[i] = reader.result
-        })
+          images[i] = reader.result;
+        });
 
-        reader.readAsDataURL(files[i])
+        reader.readAsDataURL(files[i]);
       }
     }
   }
 
   async function vinPopulate(vin) {
-    console.log(vin)
+    console.log(vin);
     let vindata = await axios.get(
       `https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`
-    )
-    console.log(vindata)
-    console.log(vindata.data.Results[7])
-    vehicle.make = vindata.data.Results[7].Value
-    vehicle.model = vindata.data.Results[9].Value
-    vehicle.year = vindata.data.Results[10].Value
-    vehicle.specs.doors = vindata.data.Results[24].Value
-    vehicle.specs.seats = vindata.data.Results[47].Value
+    );
+    console.log(vindata);
+    console.log(vindata.data.Results[7]);
+    vehicle.make = vindata.data.Results[7].Value;
+    vehicle.model = vindata.data.Results[9].Value;
+    vehicle.year = vindata.data.Results[10].Value;
+    vehicle.specs.doors = vindata.data.Results[24].Value;
+    vehicle.specs.seats = vindata.data.Results[47].Value;
 
     //TODO: add engine specs for displacement, cylinders, etc.
   }
 
   const addVehicle = async () => {
-    console.log("adding vehicle")
-    let fileLength = files.length
-    vehicle.fileLength = fileLength
-    let formData = new FormData()
-    let jsondata = JSON.stringify(vehicle)
-    formData.append("jsondata", jsondata)
+    console.log("adding vehicle");
+    let fileLength = files.length || 0;
+    vehicle.fileLength = fileLength;
+    let formData = new FormData();
+    let jsondata = JSON.stringify(vehicle);
+    formData.append("jsondata", jsondata);
     for (let x = 0; x < fileLength; x++) {
-      formData.append("file[]", files[x])
+      formData.append("file[]", files[x]);
     }
     const res = await axios({
       method: "post",
@@ -80,12 +80,12 @@
       },
     })
       .then(function (response) {
-        console.log(response.data)
+        console.log(response.data);
       })
       .catch(function (response) {
-        console.log(response.error)
-      })
-  }
+        console.log(response.error);
+      });
+  };
 </script>
 
 <div class="container mx-auto p-12">

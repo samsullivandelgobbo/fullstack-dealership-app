@@ -24,13 +24,15 @@ class UserService extends BaseService {
   async addFavoriteByUserId(userId, favorite) {
     return await this.updateOneByField(
       { _id: userId },
-      { $push: { favorites: favorite } }
+      { $push: { favorites: favorite } },
+      { new: true }
     )
   }
   async deleteFavoriteByUserId(userId, favorite) {
     return await this.updateOneByField(
       { _id: userId },
-      { $pull: { favorites: favorite } }
+      { $pull: { favorites: favorite } },
+      { new: true }
     )
   }
   async deleteUser(user) {
