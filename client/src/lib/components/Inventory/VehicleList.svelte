@@ -4,23 +4,23 @@
   import { onMount } from "svelte";
   export let vehicles: any;
 
-  let loggedin;
-  let favorites;
-  onMount(async () => {
-    loggedIn.subscribe((value) => {
-      loggedin = value;
-    });
-    userInfo.subscribe((value) => {
-      favorites = value.favorites;
-    });
-  });
+  // let loggedin;
+  // let favorites;
+  // onMount(async () => {
+  //   loggedIn.subscribe((value) => {
+  //     loggedin = value;
+  //   });
+  //   userInfo.subscribe((value) => {
+  //     favorites = value.favorites;
+  //   });
+  // });
 </script>
 
 <div class="grid lg:grid-cols-3 gap-4">
   {#if $vehicles}
     {#each $vehicles as item}
       <VehicleCard {item}>
-        {#if !loggedin}
+        <!-- {#if !loggedin}
           <LoginModal>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@
               /></svg
             >
           </button>
-        {/if}
+        {/if} -->
       </VehicleCard>
     {/each}
   {/if}

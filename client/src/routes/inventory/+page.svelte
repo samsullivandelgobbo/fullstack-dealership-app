@@ -7,27 +7,28 @@
     LoginModal,
     AddFavorite,
     RemoveFavorite,
+    VehicleList
   } from "$lib/components";
   import { loggedIn, userInfo } from "$lib/data/store";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
 
-  let loggedin;
-  let favorites;
-  onMount(async () => {
-    favorites = get(userInfo).favorites;
-    console.log(favorites);
-  });
+  // let loggedin;
+  // let favorites;
+  // onMount(async () => {
+  //   favorites = get(userInfo).favorites;
+  //   console.log(favorites);
+  // });
 
-  loggedIn.subscribe((value) => {
-    loggedin = value;
-  });
+  // loggedIn.subscribe((value) => {
+  //   loggedin = value;
+  // });
   const vehicles = liveQuery(() => (browser ? db.vehicles.toArray() : []));
 </script>
 
-<!-- <VehicleList {vehicles} {loggedin} /> -->
+<VehicleList {vehicles}/>
 
-<div class="grid lg:grid-cols-3 gap-4">
+<!-- <div class="grid lg:grid-cols-3 gap-4">
   {#if $vehicles}
     {#each $vehicles as item}
       <VehicleCard {item}>
@@ -89,4 +90,4 @@
       </VehicleCard>
     {/each}
   {/if}
-</div>
+</div> -->
