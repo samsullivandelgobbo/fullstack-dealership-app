@@ -2,10 +2,11 @@
   import { onMount } from "svelte";
   import { LoginModal, AddFavorite, RemoveFavorite } from "$lib/components";
   import { loggedIn, userInfo } from "$lib/data/store";
+  import { HandleFavorite } from "../Actions/UserFavorite"
   export let item:any
   let loggedin
   let favorites
-  let favorite
+  let favorite = null
   loggedIn.subscribe((value) => {
       loggedin = value;
     });
@@ -16,10 +17,20 @@
     for (let x in favorites) {
       if (favorites[x] == item.id) {
         favorite = true;
-        console.log('favorite:', favorite)
+        
       }
     }
   });
+
+  function handleFavorite() {
+    if (favorite) {
+      favorite = false
+      RemoveFavorite(item.id)
+    } else {
+      favorite = true
+      AddFavorite(item.id)
+    }
+  }
 </script>
 
 <!-- <div class="card card-compact bg-base-100 shadowl-sm">
@@ -64,7 +75,7 @@
             >
           </LoginModal>
         {:else if favorite}
-          <button on:click={RemoveFavorite}>
+          <button on:click={handleFavorite}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="32"
@@ -82,7 +93,7 @@
             >
           </button>
         {:else}
-          <button on:click={() => AddFavorite(item.id)}>
+          <button on:click={handleFavorite}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="32"

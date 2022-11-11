@@ -3,8 +3,8 @@
   import { Navbar, LoginModal, Token, Logout } from "$lib/components"
   import { onMount } from "svelte"
   import { loggedIn, userInfo } from "$lib/data/store"
-  let userState: boolean
-  let userData: object
+  let userState
+  let userData
   onMount(async () => {
     console.log("verifying token")
     await Token()

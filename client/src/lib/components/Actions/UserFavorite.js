@@ -1,5 +1,5 @@
 import axios from "axios"
-import { userInfo } from '$lib/data/store'
+import { userInfo } from "$lib/data/store"
 
 /** 
   need to post favorite to db and then update the store
@@ -24,22 +24,26 @@ export async function AddFavorite(favorite) {
     userID = value.userID
     email = value.email
   })
+  console.log(favorites)
   const res = await axios({
-    method: 'post',
-    url: 'http://localhost:8080/user/favorite',
+    method: "post",
+    url: "http://localhost:8080/user/favorite",
     data: {
-      id: userID,
+      id: decodeURIComponent(userID),
       favorite: favorite,
     },
     headers: {
-      Authorization: localStorage.getItem('token'),
+      Authorization: localStorage.getItem("token"),
     },
     params: {
       id: email,
-    }
+    },
+  }).catch(function (error) {
+    console.log(error)
   })
   userInfo.update((value) => {
-    value = [...value, favorite]
+    value.favorites = [...value.favorites, favorite]
+    console.log(value.favorites)
   })
   console.log(res.data)
 }
@@ -55,17 +59,22 @@ export async function RemoveFavorite(favorite) {
     email = value.email
   })
   const res = await axios({
-    method: 'post',
-    url: 'http://localhost:8080/user/favorite',
+    method: "post",
+    url: "http://localhost:8080/user/favorite/remove",
     data: {
-      id: userID,
+      id: decodeURIComponent(userID),
       favorite: favorite,
     },
     headers: {
-      Authorization: localStorage.getItem('token'),
+      Authorization: localStorage.getItem("token"),
     },
     params: {
       id: email,
-    }
+    },
+  }).catch(function (error) {
+    console.log(error)
+  })
+  userInfo.update((value) => {
+    value.favorites = value.favorites.filter((item) => item !== favorite)
   })
 }

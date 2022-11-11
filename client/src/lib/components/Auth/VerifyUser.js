@@ -42,6 +42,7 @@ export const Token = async () => {
 
     if (res.data.success == true) {
       console.log("User verified")
+
       return loggedIn.set(true), userInfo.set(res.data)
     } else {
       console.log("User not verified")
